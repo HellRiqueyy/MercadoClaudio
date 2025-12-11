@@ -3,11 +3,11 @@ import { getDocs, collection, doc, deleteDoc } from "https://www.gstatic.com/fir
 
 async function buscarCliente() {
     const dadosBanco = await getDocs(collection(db, "cliente"))
-    const cliente = []
+    const clientes = []
     for (const doc of dadosBanco.docs) {
-        cliente.push({ id: doc.id, ...doc.data() })
+        clientes.push({ id: doc.id, ...doc.data() })
     }
-    return cliente;
+    return clientes;
 }
 
 const listaClienteDiv = document.getElementById("listaClienteDiv")
@@ -15,9 +15,9 @@ const listaClienteDiv = document.getElementById("listaClienteDiv")
 async function carregarListaDeCliente() {
     listaClienteDiv.innerHTML = "<p> Carregando clientes...</p>"
     try {
-        const cliente = await buscarCliente();
-        console.log(cliente)
-        renderizarListaDeCliente(cliente);
+        const clientes = await buscarCliente();
+        console.log(clientes)
+        renderizarListaDeCliente(clientes);
     } catch (error) {
         console.log("Erro ao carregar a lista de cliente: ", error);
         listaClienteDiv.innerHTML = "<p> Erro ao carregar a lista de cliente </p>"
@@ -25,26 +25,27 @@ async function carregarListaDeCliente() {
 
 }
 
-function renderizarListaDeCliente(cliente) {
+function renderizarListaDeCliente(clientes) {
     listaClienteDiv.innerHTML = " "
 
-    if (cliente.length === 0) {
+    if (clientes.length === 0) {
         listaClienteDiv.innerHTML = "<p> Nenhum cliente encontrado :( </p>"
         return
     }
 
-    for (let cliente of cliente) {
-        const clienteDiv = document.createElement("div");
-        clienteDiv.classList.add("cliente-item");
-        clienteDiv.innerHTML = `
-        <p> Nome: ${cliente.nome} <p>
-        <p> Telefone: ${cliente.telfone} <p>
-        <p> Valor: ${cliente.valor} <p>
-        <p> Juros: ${cliente.juros} <p>
+    for (let cliente of clientes) {
+        const clientesDiv = document.createElement("div");
+        clientesDiv.classList.add("cliente-item");
+        clientesDiv.innerHTML = `
+        <p> Nome: ${cliente.nome} </p>
+        <p> Telefone: ${cliente.telfone} </p>
+        <p> Valor: ${cliente.valor} </p>
+        <p> Juros: ${cliente.juros}% </p>
+        <p> Data: ${cliente.data} </p>
         <button class="btn-excluir" data-id="${cliente.id}"> Excluir </button> <br>
         <button class="btn-editar" data-id="${cliente.id}"> Editar </button> 
         `
-        listaClienteDiv.appendChild(clienteDiv)
+        listaClienteDiv.appendChild(clientesDiv)
     }
     addEventListener();
 }
@@ -122,31 +123,6 @@ async function buscarClientePorId(id) {
     }
 }
 
-document.getElementById("btnSalvarEdicao").addEventListener("click", async() => {
-     const id = edicao.editarId.value;
-     const novoDados = {
-        nome: edicao.editarNome.value.trim(),
-        telefone: edicao.editarTelefone.value.trim(),
-        valor: parseInt(edicao.editarValor.value),
-        juros: parseInt(edicao.editarJuros.value),
-        data: edicao.editarData.value.trim()
-     };
-
-     try {
-        const ref = doc(db, "cliente", id);
-        await setDoc(ref, novoDados);
-        alert("Cliente atualizado com sucesso!");
-        edicao.formularioEditar.style.display="none";
-        carregarListaDeFuncionario();
-     } catch (erro) {
-        console.log("Erro ao atualizar cliente: ", erro);
-        alert("Erro ao atualizar cliente. Tente novamente!");
-     }
-})
-
-document.getElementById("btnCancelarEdicao").addEventListener("click", () => {
-    document.getElementById("formulario-edicao").style.display="none";
-})
 
 function addEventListener() {
     listaClienteDiv.addEventListener("click", lidarClique);
