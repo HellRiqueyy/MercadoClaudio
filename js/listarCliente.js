@@ -1,62 +1,63 @@
 import { db } from "./firebaseConfig.js";
-import { getDocs, collection, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js"
+import { getDocs, collection, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js"
 
 async function buscarCliente() {
     const dadosBanco = await getDocs(collection(db, "cliente"))
-    const funcionarios = []
+    const cliente = []
     for (const doc of dadosBanco.docs) {
-        funcionarios.push({ id: doc.id, ...doc.data() })
+        cliente.push({ id: doc.id, ...doc.data() })
     }
-    return funcionarios;
+    return cliente;
 }
 
-const listaFuncionarioDiv = document.getElementById("listar-funcionario")
+const listaClienteDiv = document.getElementById("listaClienteDiv")
 
-async function carregarListaDeFuncionario() {
-    listaFuncionarioDiv.innerHTML = "<p> Carregando Lista de Funcionários...</p>"
+async function carregarListaDeCliente() {
+    listaClienteDiv.innerHTML = "<p> Carregando clientes...</p>"
     try {
-        const funcionarios = await buscarFuncionarios();
-        console.log(funcionarios)
-        renderizarListaDeFuncionarios(funcionarios);
+        const cliente = await buscarCliente();
+        console.log(cliente)
+        renderizarListaDeCliente(cliente);
     } catch (error) {
-        console.log("Erro ao carregar a lista de funcionário: ", error);
-        listaFuncionarioDiv.innerHTML = "<p> Erro ao carregar a lista de Funcionários </p>"
+        console.log("Erro ao carregar a lista de cliente: ", error);
+        listaClienteDiv.innerHTML = "<p> Erro ao carregar a lista de cliente </p>"
     }
 
 }
 
-function renderizarListaDeFuncionarios(funcionarios) {
-    listaFuncionarioDiv.innerHTML = " "
+function renderizarListaDeCliente(cliente) {
+    listaClienteDiv.innerHTML = " "
 
-    if (funcionarios.length === 0) {
-        listaFuncionarioDiv.innerHTML = "<p> Nenhum funcionário encontrado :( </p>"
+    if (cliente.length === 0) {
+        listaClienteDiv.innerHTML = "<p> Nenhum cliente encontrado :( </p>"
         return
     }
 
-    for (let funcionario of funcionarios) {
-        const funcionariosDiv = document.createElement("div");
-        funcionariosDiv.classList.add("funcionario-item");
-        funcionariosDiv.innerHTML = `
-        <strong> Nome: </strong> ${funcionario.nome} <br>
-        <strong> Idade: </strong> ${funcionario.idade} <br>
-        <strong> Cargo: </strong> ${funcionario.cargo} <br>
-        <button class="btn-excluir" data-id="${funcionario.id}"> Excluir </button> <br>
-        <button class="btn-editar" data-id="${funcionario.id}"> Editar </button> 
+    for (let cliente of cliente) {
+        const clienteDiv = document.createElement("div");
+        clienteDiv.classList.add("cliente-item");
+        clienteDiv.innerHTML = `
+        <p> Nome: ${cliente.nome} <p>
+        <p> Telefone: ${cliente.telfone} <p>
+        <p> Valor: ${cliente.valor} <p>
+        <p> Juros: ${cliente.juros} <p>
+        <button class="btn-excluir" data-id="${cliente.id}"> Excluir </button> <br>
+        <button class="btn-editar" data-id="${cliente.id}"> Editar </button> 
         `
-        listaFuncionarioDiv.appendChild(funcionariosDiv)
+        listaClienteDiv.appendChild(clienteDiv)
     }
     addEventListener();
 }
 
-    async function excluirFuncionario(idFuncionario) {
+    async function excluirCliente(idCliente) {
         try {
-            const documentoDeletar = doc(db, "funcionarios", idFuncionario);
+            const documentoDeletar = doc(db, "cliente", idCliente);
             await deleteDoc(documentoDeletar);
-            console.log("Funcionário excluído com sucesso");
+            console.log("Cliente excluído com sucesso");
             return true;
         } catch (erro) {
-            console.error("Erro ao excluir funcionário: ", erro);
-            alert("Erro ao excluir funcionário. Tente novamente!");
+            console.error("Erro ao excluir cliente: ", erro);
+            alert("Erro ao excluir cliente. Tente novamente!");
             return false;
         }
     }
@@ -64,13 +65,13 @@ function renderizarListaDeFuncionarios(funcionarios) {
 async function lidarClique(eventoDeClique) {
     const btnExcluir = eventoDeClique.target.closest('.btn-excluir');
     if (btnExcluir) {
-        const certeza = confirm("Tem certeza que deseja excluir este funcionário?");
+        const certeza = confirm("Tem certeza que deseja excluir este cliente?");
         if (certeza) {
-            const idFuncionario = btnExcluir.dataset.id;
-            const exclusaoBemSucedida = await excluirFuncionario(idFuncionario);
+            const idCliente = btnExcluir.dataset.id;
+            const exclusaoBemSucedida = await excluirCliente(idCliente);
             if (exclusaoBemSucedida) {
-                carregarListaDeFuncionario();
-                alert("Funcionário excluído com sucesso!");
+                carregarListaDeCliente();
+                alert("Cliente excluído com sucesso!");
             } else {
                 alert("Exclusão cancelada.");
             }
@@ -78,15 +79,16 @@ async function lidarClique(eventoDeClique) {
     }
     const btnEditar = eventoDeClique.target.closest('.btn-editar');
     if (btnEditar) {
-        const idFuncionario = btnEditar.dataset.id;
-        const funcionario = await buscarFuncionarioPorId(idFuncionario);
+        const idCliente = btnEditar.dataset.id;
+        const cliente = await buscarClientePorId(idCliente);
 
         const edicao = getValoresEditar();
 
-        edicao.editarNome.value=funcionario.nome.value;
-        edicao.editarIdade.value=funcionario.idade;
-        edicao.editarCargo.value=funcionario.cargo;
-        edicao.idFuncionario.value=idFuncionario;
+        edicao.editarNome.value=cliente.nome.value;
+        edicao.editarTelefone.value=cliente.telfone;
+        edicao.editarValor.value=cliente.valor;
+        edicao.editarJuros.value=cliente.juros;
+        edicao.editarData.value=cliente.data;
 
         edicao.formularioEditar.style.display="block";
     }
@@ -95,26 +97,27 @@ async function lidarClique(eventoDeClique) {
     function getValoresEditar() {
         return {
             editarNome: document.getElementById("editar-nome"),
-            editarIdade: document.getElementById("editar-idade"),
-            editarCargo: document.getElementById("editar-cargo"),
-            idFuncionario: document.getElementById("id-funcionario"),
+            editarTelefone: document.getElementById("editar-telefone"),
+            editarValor: document.getElementById("editar-valor"),
+            editarJuros: document.getElementById("editar-juros"),
+            editarData: document.getElementById("editar-data"),
     }
 }
 
-async function buscarFuncionarioPorId(id) {
+async function buscarClientePorId(id) {
     try{
-        const funcionarioDoc = doc(db, "funcionarios", id);
+        const funcionarioDoc = doc(db, "cliente", id);
         const dadoAtual = await getDoc(funcionarioDoc);
 
         if(dadoAtual.exists()){
             return {id: dadoAtual.id, ...dadoAtual.data()};
         } else {
-            console.log("Nenhum funcionário encontrado com esse ID", id);
+            console.log("Nenhum cliente encontrado com esse ID", id);
             return null;
         }
     } catch (erro) {
-        console.log("Erro ao buscar funcionário por ID: ", erro);
-        alert("Erro ao buscar funcionário para editar");
+        console.log("Erro ao buscar cliente por ID: ", erro);
+        alert("Erro ao buscar cliente para editar");
         return null;
     }
 }
@@ -123,19 +126,21 @@ document.getElementById("btnSalvarEdicao").addEventListener("click", async() => 
      const id = edicao.editarId.value;
      const novoDados = {
         nome: edicao.editarNome.value.trim(),
-        idade: parseInt(edicao.editarIdade.value),
-        cargo: edicao.editarCargo.value.trim()
+        telefone: edicao.editarTelefone.value.trim(),
+        valor: parseInt(edicao.editarValor.value),
+        juros: parseInt(edicao.editarJuros.value),
+        data: edicao.editarData.value.trim()
      };
 
      try {
-        const ref = doc(db, "funcionarios", id);
+        const ref = doc(db, "cliente", id);
         await setDoc(ref, novoDados);
-        alert("Funcionário atualizado com sucesso!");
+        alert("Cliente atualizado com sucesso!");
         edicao.formularioEditar.style.display="none";
         carregarListaDeFuncionario();
      } catch (erro) {
-        console.log("Erro ao atualizar funcionário: ", erro);
-        alert("Erro ao atualizar funcionário. Tente novamente!");
+        console.log("Erro ao atualizar cliente: ", erro);
+        alert("Erro ao atualizar cliente. Tente novamente!");
      }
 })
 
@@ -144,7 +149,7 @@ document.getElementById("btnCancelarEdicao").addEventListener("click", () => {
 })
 
 function addEventListener() {
-    listaFuncionarioDiv.addEventListener("click", lidarClique);
+    listaClienteDiv.addEventListener("click", lidarClique);
 }
 
-document.addEventListener("DOMContentLoaded", carrega);
+document.addEventListener("DOMContentLoaded", carregarListaDeCliente);
