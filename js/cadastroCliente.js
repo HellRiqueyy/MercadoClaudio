@@ -5,17 +5,17 @@ function getInput() {
     return {
         name: document.getElementById("name"),
         telefone: document.getElementById("telefone"),
-        cpf: document.getElementById("cpf"),
-        nivel: document.getElementById("nivel")
+        valor: document.getElementById("valor"),
+        juros: document.getElementById("juros")
     }
 }
 
-function getValores({ name, telefone, cpf, nivel }) {
+function getValores({ name, telefone, valor, juros }) {
     return {
         nome: name.value.trim(),
-        telefone: parseInt(telefone.value),
-        cpf: cpf.value.trim(),
-        nivel: nivel.value.trim()
+        telefone: telefone.value.trim(),
+        valor: parseInt(valor.value),
+        juros: parseInt(juros.value)
     }
 }
 
@@ -30,4 +30,4 @@ document.getElementById("btnCadastrar").addEventListener("click", async function
     } catch (e) {
         console.log("Erro: ", e)
     }
-})  
+})              
