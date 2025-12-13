@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+</head>
+
+<body>
+    <div id="header-content"></div>
+
+    <div class="input">
+
+        <h2>NOME</h2>
+        <input type="text" id="name">
+        <h2>TELEFONE</h2>
+        <input type="text" id="telefone">
+        <h2>VALOR</h2>
+        <input type="text" id="valor">
+        <h2>JUROS</h2>
+        <input type="text" id="juros">
+        <h2>DATA DE INICIO</h2>
+        <input type="date" id="data">
+        <br>
+        <button id="btnCadastrar">Cadastrar Cliente</button>
+    </div>
+
+    <div id="rodape-content"></div>
+
+    <script type="module" src="/js/cadastroCliente.js"></script>
+    <script>
+        // Carregar Header
+        async function loadHeader() {
+            const response = await fetch('../contents/header.html');
+            document.getElementById('header-content').innerHTML = await response.text();
+        }
+        loadHeader();
+
+        // Carregar Rodapé
+        async function loadRodape() {
+            const response = await fetch('../contents/rodape.html');
+            document.getElementById('rodape-content').innerHTML = await response.text();
+        }
+        loadRodape();
+    </script>
+</body>
+
+</html>

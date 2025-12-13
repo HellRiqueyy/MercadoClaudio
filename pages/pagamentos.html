@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamentos</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div id="header-content"></div>
+
+    <div class="input">
+
+        <h2>Contas a receber</h2>
+        <div id="listaClienteDiv">
+
+        </div>
+    </div>
+
+    <div id="rodape-content"></div>
+    <script type="module" src="./../js/listarCliente.js"></script>
+    <script>
+        // Carregar Header
+        async function loadHeader() {
+            const response = await fetch('../contents/header.html');
+            document.getElementById('header-content').innerHTML = await response.text();
+        }
+        loadHeader();
+
+        // Carregar Rodapé
+        async function loadRodape() {
+            const response = await fetch('../contents/rodape.html');
+            document.getElementById('rodape-content').innerHTML = await response.text();
+        }
+        loadRodape();
+    </script>
+</body>
+
+</html>

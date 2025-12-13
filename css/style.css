@@ -1,0 +1,232 @@
+body {
+    font-family: Arial, Helvetica, monospace;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 50px;
+    flex: 1;
+}
+
+#btnCadastrar {
+    background-color: #557AF7;
+    border-radius: 9px;
+    color: #f5f5f5;
+    padding: 10px 20px;
+    font-weight: bold;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+#btnCadastrar:hover {
+    transform: scale(1.05);
+}
+
+input, select {
+    border-radius: 6px;
+    background-color: #fafafa;
+    border: 1px solid #ccc;
+    padding: 8px;
+    margin: 5px 0 15px 0;
+    width: 250px;
+    font-size: 1rem;
+}
+
+h2 {
+    font-weight: 300;
+    margin-bottom: 10px;
+}
+
+.btn-saldo {
+    background-color: #557AF7;
+    border-radius: 9px;
+    color: #f5f5f5;
+    padding: 5px 10px;
+    font-weight: bold;
+    font-size: 0.7rem;
+    border: none;
+    margin-left: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-saldo:hover {
+    transform: scale(1.02);
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+#saldoAtual {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+#btn-VerificarSaldo {
+    background-color: #557AF7;
+    border-radius: 9px;
+    color: #fff;
+    padding: 10px 20                                                                                                                                                                                                                                                                                                                                                                                                                                                           px;
+    font-weight: bold;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#btn-VerificarSaldo:hover {
+    background-color: #557AF7;
+}
+
+#listaClienteDiv {
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .input {
+        padding: 20px;
+    }
+    
+    input, select {
+        width: 200px;
+    }
+    
+    h2 {
+        font-size: 1.2rem;
+    }
+    
+    #btnCadastrar, #btn-VerificarSaldo {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Estilos para a página de pagamentos */
+.cliente-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+    box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+}
+
+.cliente-item p {
+    margin: 5px 0;
+    font-size: 1rem;
+}
+
+.btn-pagar {
+    background-color: #557AF7;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-pagar:hover {
+    background-color: #557AF7;
+}
+
+.btn-editar {
+    background-color: #557AF7;
+    color: rgb(255, 255, 255);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-editar:hover {
+    background-color: #557AF7;
+}
+
+/* Modais */
+#modal-pagar, #modal-editar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#modal-pagar > div, #modal-editar > div {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    max-width: 400px;
+    width: 90%;
+}
+
+#modal-pagar h3, #modal-editar h3 {
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+#modal-pagar input, #modal-editar input {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#confirmar-pagar, #cancelar-pagar, #confirmar-editar, #cancelar-editar {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+#confirmar-pagar, #confirmar-editar {
+    background-color: #007bff;
+    color: white;
+}
+
+#confirmar-pagar:hover, #confirmar-editar:hover {
+    background-color: #0056b3;
+}
+
+#cancelar-pagar, #cancelar-editar {
+    background-color: #6c757d;
+    color: white;
+}
+
+#cancelar-pagar:hover, #cancelar-editar:hover {
+    background-color: #545b62;
+}
+
+.btn-saldo:hover {
+    cursor: pointer;
+    transform: scale(1.02);
+}
