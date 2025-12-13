@@ -18,32 +18,21 @@ function getValores({ name, telefone, valor, juros, data }) {
     const jurosInput = parseFloat(juros.value) || 0;
     const dataCobranca = data.value;
 
-    let jurosAplicado = 0;
-    let valorComJuros = valorNum;
-    if (dataCobranca) {
-        const cobrancaDate = new Date(dataCobranca);
-        const hoje = new Date();
-        const diffMs = hoje - cobrancaDate;
-        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-        if (diffDays > 30 && jurosInput > 0) {
-            jurosAplicado = jurosInput;
-            const adicional = (valorNum * jurosAplicado) / 100;
-            valorComJuros = Math.round((valorNum + adicional) * 100) / 100;
-        }
-    }
-
     return {
         nome,
         telefone: telefoneVal,
         valor: valorNum,
-        juros: jurosAplicado,
-        valorComJuros,
+        juros: jurosInput,
         data: dataCobranca
     }
 }
 
 document.getElementById("btnCadastrar").addEventListener("click", async function () {
     const Inputs = getInput()
+    if (!Inputs.name.value.trim() || !Inputs.telefone.value.trim() || !Inputs.valor.value.trim() || !Inputs.juros.value.trim() || !Inputs.data.value) {
+        alert("Todos os campos são obrigatórios!");
+        return;
+    }
     const dados = getValores(Inputs)
     console.log("dados", dados)
 
